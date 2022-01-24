@@ -52,8 +52,8 @@ func Uniquize() {
 	}
 	defer file.Close()
 
-	fileUnique, errSorted := os.Create("C:\\Users\\kroop\\Downloads\\coursera\\uniqueization\\uniquized_data.txt")
-	if errSorted != nil {
+	fileUnique, errUnique := os.Create("C:\\Users\\kroop\\Downloads\\coursera\\uniqueization\\uniquized_data.txt")
+	if errUnique != nil {
 		fmt.Println("Unable to create file:", err)
 		os.Exit(1)
 	}
