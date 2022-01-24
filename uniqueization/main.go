@@ -1,12 +1,21 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-	"io"
+	"log"
 	"os"
+	"sort"
+	"strings"
 )
 
-func main() {
+func SortString(w string) string {
+	s := strings.Split(w, "")
+	sort.Strings(s)
+	return strings.Join(s, "")
+}
+
+func Organize() {
 	file, err := os.Open("data_map.txt")
 	if err != nil {
 		fmt.Println(err)
@@ -14,33 +23,62 @@ func main() {
 	}
 	defer file.Close()
 
-	data := make([]byte, 64)
-	alreadySeenData := make(map[byte]bool)
-	var str string
-	for {
-		_, err := file.Read(data)
-		for i := range data {
-			if _, found := alreadySeenData[data[i]]; found {
-				continue
-			} else {
-				alreadySeenData[data[i]] = true
-				str += string(data[i])
-			}
-		}
-		if err == io.EOF { // если конец файла
-			break // выходим из цикла
-		}
-	}
-	fileNew, errNew := os.Create("out_data.txt")
-
-	if errNew != nil {
+	fileSorted, errSorted := os.Create("sorted_data.txt")
+	if errSorted != nil {
 		fmt.Println("Unable to create file:", err)
 		os.Exit(1)
 	}
-	defer fileNew.Close()
+	defer fileSorted.Close()
 
-	for i := range str {
-		fmt.Fprintln(fileNew, string(str[i]))
+	var str string
+	fileScanner := bufio.NewScanner(file)
+	for fileScanner.Scan() {
+		str += fileScanner.Text()
 	}
-	fmt.Println("Done")
+	if err := fileScanner.Err(); err != nil {
+		log.Fatalf("Error while reading file: %s", err)
+	}
+
+	strSorted := SortString(str)
+	for i := range strSorted {
+		fmt.Fprintln(fileSorted, string(strSorted[i]))
+	}
+}
+func Uniquize() {
+	file, err := os.Open("sorted_data.txt")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	defer file.Close()
+
+	fileUnique, errSorted := os.Create("uniquized_data.txt")
+	if errSorted != nil {
+		fmt.Println("Unable to create file:", err)
+		os.Exit(1)
+	}
+	defer fileUnique.Close()
+
+	fileScanner := bufio.NewScanner(file)
+	var prev string
+	for fileScanner.Scan() {
+		txt := fileScanner.Text()
+		if txt == prev {
+			continue
+		}
+		if txt < prev {
+			panic("File not sorted")
+		}
+		prev = txt
+		fmt.Fprintln(fileUnique, txt)
+	}
+	if err := fileScanner.Err(); err != nil {
+		log.Fatalf("Error while reading file: %s", err)
+	}
+}
+
+func main() {
+	Organize()
+	Uniquize()
+	fmt.Println("Done!")
 }
