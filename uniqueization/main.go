@@ -39,7 +39,8 @@ func main() {
 	}
 	defer fileNew.Close()
 
-	fileNew.WriteString(str)
-
-	fmt.Println("Done.")
+	for i := range str {
+		fmt.Fprintln(fileNew, string(str[i]))
+	}
+	fmt.Println("Done")
 }
