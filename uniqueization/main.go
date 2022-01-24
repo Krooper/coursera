@@ -16,14 +16,14 @@ func SortString(w string) string {
 }
 
 func Organize() {
-	file, err := os.Open("data_map.txt")
+	file, err := os.Open("C:\\Users\\kroop\\Downloads\\coursera\\uniqueization\\data_map.txt")
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 	defer file.Close()
 
-	fileSorted, errSorted := os.Create("sorted_data.txt")
+	fileSorted, errSorted := os.Create("C:\\Users\\kroop\\Downloads\\coursera\\uniqueization\\sorted_data.txt")
 	if errSorted != nil {
 		fmt.Println("Unable to create file:", err)
 		os.Exit(1)
@@ -45,14 +45,14 @@ func Organize() {
 	}
 }
 func Uniquize() {
-	file, err := os.Open("sorted_data.txt")
+	file, err := os.Open("C:\\Users\\kroop\\Downloads\\coursera\\uniqueization\\sorted_data.txt")
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 	defer file.Close()
 
-	fileUnique, errSorted := os.Create("uniquized_data.txt")
+	fileUnique, errSorted := os.Create("C:\\Users\\kroop\\Downloads\\coursera\\uniqueization\\uniquized_data.txt")
 	if errSorted != nil {
 		fmt.Println("Unable to create file:", err)
 		os.Exit(1)
